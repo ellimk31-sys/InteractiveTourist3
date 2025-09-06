@@ -1,1 +1,403 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Proposal: Viitasaari Digital Tourism Solution</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Finnish Lakeside -->
+    <!-- Application Structure Plan: The application is designed as a single-page, top-to-bottom narrative flow to persuasively guide a stakeholder (e.g., the project manager) through the proposal. It starts with a hero section stating the vision, then details the 3-pillar solution in an interactive tabbed section. This is followed by a clickable timeline and an animated budget chart to make the plan and costs tangible and transparent. The structure was chosen to be a compelling, easy-to-digest story rather than a static document, enhancing understanding and buy-in. -->
+    <!-- Visualization & Content Choices: 
+        1. Report Info: The three proposed solution pillars (QR Trail, Map, Chatbot). Goal: Inform/Organize. Viz/Method: Interactive tab system with HTML/CSS phone mockups. Interaction: User clicks a pillar icon to reveal its detailed description and benefits. Justification: This clearly separates and explains the core components of the solution in a focused, interactive manner. Library: Vanilla JS.
+        2. Report Info: The 3-week implementation plan. Goal: Organize/Show Change Over Time. Viz/Method: A responsive, vertical timeline diagram built with HTML/CSS. Interaction: Static but visually clear process flow. Justification: This makes the project plan feel concrete, structured, and achievable within the short timeframe. Library: N/A (HTML/CSS).
+        3. Report Info: The €2,000 project budget. Goal: Inform/Compare. Viz/Method: A donut chart. Interaction: Hovering over segments reveals tooltips with cost details. Justification: A chart provides a quick, clear visual breakdown of the budget allocation, emphasizing the proposal's cost-effectiveness. Library: Chart.js.
+        4. Report Info: Long-term maintenance costs. Goal: Inform. Viz/Method: Styled summary cards. Interaction: Static display. Justification: Simple cards clearly present the low, sustainable ongoing costs. Library: N/A.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #3D405B;
+        }
+        .bg-primary { background-color: #F8F7F4; }
+        .bg-secondary { background-color: #FFFFFF; }
+        .bg-accent { background-color: #81B29A; }
+        .text-accent { color: #81B29A; }
+        .text-heading { color: #3D405B; }
+        .text-body { color: #5E607A; }
+        .border-accent { border-color: #81B29A; }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #81B29A;
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .tab.active {
+            border-color: #81B29A;
+            background-color: #81B29A;
+            color: white;
+        }
+        .tab-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+        .chart-container {
+            position: relative; 
+            width: 100%; 
+            max-width: 400px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+    </style>
+</head>
+<body class="bg-primary">
+
+    <header class="bg-secondary shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-heading">Viitasaari Digital Tourism Proposal</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#solution" class="nav-link text-body hover:text-accent font-medium">The Solution</a>
+                <a href="#plan" class="nav-link text-body hover:text-accent font-medium">The Plan</a>
+                <a href="#budget" class="nav-link text-body hover:text-accent font-medium">The Budget</a>
+                <a href="#contact" class="nav-link text-body hover:text-accent font-medium">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <section id="hero" class="text-center py-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-heading mb-4">A Digital Welcome to Viitasaari</h2>
+            <p class="text-lg text-body max-w-3xl mx-auto mb-6">This is an interactive proposal for a cost-effective, innovative, and sustainable digital solution to enhance the tourist experience and support local businesses in Viitasaari, without the need for dedicated staff.</p>
+            <div class="bg-secondary p-4 rounded-lg shadow-md inline-block">
+                <p class="text-body font-medium">Prepared by: Elli</p>
+                <p class="text-sm text-gray-500">elli.mk31@gmail.com</p>
+            </div>
+        </section>
+
+        <section id="solution" class="py-16">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl font-bold text-heading mb-3">The Viitasaari Digital Tourist Ecosystem</h3>
+                <p class="text-body max-w-3xl mx-auto">Our solution is a multi-faceted digital ecosystem built on three interconnected pillars. It's designed to be comprehensive yet simple, providing tourists with everything they need to explore Viitasaari while actively promoting local businesses.</p>
+            </div>
+            
+            <div class="bg-secondary rounded-xl shadow-lg p-6 md:p-8">
+                <div class="flex flex-col md:flex-row gap-8">
+                    <div class="w-full md:w-1/2">
+                        <div class="flex justify-center md:justify-start space-x-2 sm:space-x-4 mb-6">
+                            <button class="tab active flex items-center gap-2 p-3 rounded-lg border-2 border-transparent transition" data-tab="1">
+                                <span class="tab-icon">
+                                    <span class="w-full h-full block leading-none text-2xl">📱</span>
+                                </span>
+                                <span class="font-medium text-sm sm:text-base">QR Trail</span>
+                            </button>
+                             <button class="tab flex items-center gap-2 p-3 rounded-lg border-2 border-transparent transition" data-tab="2">
+                                <span class="tab-icon">
+                                     <span class="w-full h-full block leading-none text-2xl">🗺️</span>
+                                </span>
+                               <span class="font-medium text-sm sm:text-base">Map</span>
+                            </button>
+                             <button class="tab flex items-center gap-2 p-3 rounded-lg border-2 border-transparent transition" data-tab="3">
+                                <span class="tab-icon">
+                                    <span class="w-full h-full block leading-none text-2xl">🤖</span>
+                                </span>
+                                <span class="font-medium text-sm sm:text-base">Bot</span>
+                            </button>
+                        </div>
+                        <div id="tab-content">
+                            <div class="tab-pane active" data-tab-pane="1">
+                                <h4 class="text-2xl font-bold text-heading mb-4">Pillar 1: Interactive QR Code Trail & Digital Guidebook</h4>
+                                <p class="text-body mb-4">This foundational element transforms physical locations into gateways to rich digital content. QR codes placed at key points of interest direct tourists to a mobile-friendly "Digital Guidebook," offering context-aware information, local stories, and a clear link to our Virtual Assistant for more questions.</p>
+                                <ul class="list-disc list-inside text-body space-y-2">
+                                    <li>Provides relevant information based on the tourist's current location.</li>
+                                    <li>Actively recommends nearby cafes, shops, and services.</li>
+                                    <li>User-friendly: requires no app download, just a smartphone camera.</li>
+                                </ul>
+                            </div>
+                            <div class="tab-pane hidden" data-tab-pane="2">
+                                <h4 class="text-2xl font-bold text-heading mb-4">Pillar 2: Community-Powered Interactive Map</h4>
+                                <p class="text-body mb-4">A central, visual hub for exploring all of Viitasaari's offerings. This dynamic, categorized map visually represents points of interest, businesses, and services, making discovery intuitive and engaging. It directly addresses the proposal's call for "interactive maps."</p>
+                                <ul class="list-disc list-inside text-body space-y-2">
+                                    <li>Allows tourists to visually discover what's available and plan their routes.</li>
+                                    <li>Empowers local businesses by giving them direct visibility.</li>
+                                    <li>Simple to maintain with community input, ensuring long-term accuracy.</li>
+                                </ul>
+                            </div>
+                            <div class="tab-pane hidden" data-tab-pane="3">
+                                <h4 class="text-2xl font-bold text-heading mb-4">Pillar 3: AI-Powered Virtual Assistant on Telegram</h4>
+                                <p class="text-body mb-4">For instant, 24/7 conversational support and personalized recommendations. Tourists can ask questions in a familiar chat interface and receive rich media responses, including map links and photos, creating a powerful, staff-less support system.</p>
+                                <ul class="list-disc list-inside text-body space-y-2">
+                                    <li>Provides constant, interactive assistance without dedicated personnel.</li>
+                                    <li>Uses a platform many international tourists already have installed.</li>
+                                    <li>Persistent chat history allows users to refer back to information.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/2 flex items-center justify-center">
+                        <div class="w-full max-w-sm p-2 bg-gray-800 rounded-2xl shadow-2xl">
+                            <div class="aspect-w-9 aspect-h-16 w-full h-full">
+                                <div id="mockup-screen" class="w-full h-full bg-white rounded-lg p-4 transition-all duration-500 overflow-hidden">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="plan" class="py-16">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl font-bold text-heading mb-3">The Implementation Plan</h3>
+                <p class="text-body max-w-3xl mx-auto">A practical and agile plan to deliver the complete solution within the required three-week timeframe. The project is broken down into clear, manageable phases, leveraging community engagement to ensure success.</p>
+            </div>
+            <div class="relative">
+                <div class="hidden md:block absolute top-0 left-1/2 w-0.5 h-full bg-gray-300"></div>
+                <div class="space-y-12 md:space-y-0">
+                    <div class="md:grid md:grid-cols-2 md:gap-8 items-center">
+                        <div class="md:text-right md:pr-8 mb-4 md:mb-0">
+                           <div class="bg-accent text-white p-3 rounded-lg inline-block shadow-md">
+                                <h4 class="text-xl font-bold">Week 1</h4>
+                                <p>Discovery & Planning</p>
+                           </div>
+                        </div>
+                        <div class="bg-secondary p-6 rounded-lg shadow-md md:ml-8 relative">
+                           <div class="hidden md:block absolute -left-10 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-accent rounded-full border-4 border-primary"></div>
+                            <p class="font-semibold text-heading mb-2">Phases 1-3: Foundation</p>
+                            <p class="text-body">Kick-off meeting, host a community workshop at the Digikeskus to gather content, and set up the foundational structures for the website, map, and Telegram bot.</p>
+                        </div>
+                    </div>
+                    <div class="md:grid md:grid-cols-2 md:gap-8 items-center">
+                        <div class="bg-secondary p-6 rounded-lg shadow-md md:mr-8 mb-4 md:mb-0 md:text-right relative">
+                            <div class="hidden md:block absolute -right-10 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-accent rounded-full border-4 border-primary"></div>
+                            <p class="font-semibold text-heading mb-2">Phases 4-6: Development</p>
+                            <p class="text-body">Build the Digital Guidebook pages, populate the Interactive Map with all collected data, and "train" the AI Virtual Assistant on Telegram with a comprehensive FAQ list.</p>
+                        </div>
+                        <div class="md:pl-8">
+                            <div class="bg-accent text-white p-3 rounded-lg inline-block shadow-md">
+                                <h4 class="text-xl font-bold">Week 2</h4>
+                                <p>Content & Development</p>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="md:grid md:grid-cols-2 md:gap-8 items-center">
+                        <div class="md:text-right md:pr-8 mb-4 md:mb-0">
+                           <div class="bg-accent text-white p-3 rounded-lg inline-block shadow-md">
+                                <h4 class="text-xl font-bold">Week 3</h4>
+                                <p>Deployment & Handover</p>
+                           </div>
+                        </div>
+                        <div class="bg-secondary p-6 rounded-lg shadow-md md:ml-8 relative">
+                            <div class="hidden md:block absolute -left-10 top-1/2 transform -translate-y-1/2 w-4 h-4 bg-accent rounded-full border-4 border-primary"></div>
+                            <p class="font-semibold text-heading mb-2">Phases 7-9: Launch</p>
+                            <p class="text-body">Finalize and print QR code signage, install codes at key locations, conduct user testing, and perform the final project handover with a maintenance guide.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="budget" class="py-16">
+            <div class="text-center mb-12">
+                <h3 class="text-3xl font-bold text-heading mb-3">Budget & Sustainability</h3>
+                <p class="text-body max-w-3xl mx-auto">This solution is designed to be highly cost-effective, delivered within the €2,000 budget, and sustainable with minimal ongoing maintenance costs.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                <div>
+                    <h4 class="text-2xl font-bold text-heading text-center mb-4">Project Budget: €2,000</h4>
+                    <div class="chart-container">
+                        <canvas id="budgetChart"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-2xl font-bold text-heading mb-4">Long-Term Maintenance</h4>
+                    <div class="space-y-4">
+                        <div class="bg-secondary p-6 rounded-lg shadow-md">
+                            <p class="font-bold text-heading">Website & Guidebook Hosting</p>
+                            <p class="text-2xl font-bold text-accent">€0 - €100 <span class="text-base font-normal text-body">/ year</span></p>
+                            <p class="text-sm text-gray-500">Can be hosted on free platforms or low-cost plans.</p>
+                        </div>
+                         <div class="bg-secondary p-6 rounded-lg shadow-md">
+                            <p class="font-bold text-heading">AI Virtual Assistant (Telegram)</p>
+                             <p class="text-2xl font-bold text-accent">€0 - €200 <span class="text-base font-normal text-body">/ year</span></p>
+                             <p class="text-sm text-gray-500">Based on free or low-cost tiers depending on usage.</p>
+                        </div>
+                         <div class="bg-secondary p-6 rounded-lg shadow-md border-2 border-accent">
+                            <p class="font-bold text-heading">Total Estimated Annual Cost</p>
+                             <p class="text-3xl font-bold text-accent">€0 - €300</p>
+                             <p class="text-sm text-gray-500">A sustainable solution for the long term.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer id="contact" class="bg-secondary mt-16">
+        <div class="container mx-auto px-6 py-12 text-center">
+            <h3 class="text-2xl font-bold text-heading mb-3">Ready to bring a digital welcome to Viitasaari?</h3>
+            <p class="text-body mb-6">Thank you for considering this proposal. Please do not hesitate to contact me with any further questions.</p>
+            <a href="mailto:elli.mk31@gmail.com" class="bg-accent text-white font-bold py-3 px-6 rounded-lg hover:opacity-90 transition-opacity shadow-md">
+                Contact Elli
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            const mockupScreen = document.getElementById('mockup-screen');
+
+            const mockupContent = {
+                '1': `
+                    <div class="bg-gray-100 h-full flex flex-col p-2 space-y-2">
+                        <div class="h-32 bg-cover bg-center rounded" style="background-image: url('https://placehold.co/400x200/81B29A/FFFFFF?text=Scenic+View')"></div>
+                        <h1 class="font-bold text-gray-800 text-lg">Viitasaari Lookout</h1>
+                        <p class="text-gray-600 text-sm flex-grow">Information about the view, local legends, and the history of this beautiful spot.</p>
+                        <div class="bg-teal-500 text-white p-3 rounded-lg text-center font-semibold cursor-pointer">Ask a Question? 🤖</div>
+                    </div>`,
+                '2': `
+                    <div class="bg-gray-100 h-full flex flex-col">
+                        <div class="p-2 bg-white flex justify-between items-center shadow-sm">
+                           <h1 class="font-bold text-gray-800">Viitasaari Map</h1>
+                           <span class="text-xl">🔍</span>
+                        </div>
+                        <div class="flex-grow bg-cover bg-center" style="background-image: url('https://placehold.co/400x600/E0E0E0/3D405B?text=Map+View')">
+                           <div class="p-2 relative top-1/4 left-1/4 bg-white rounded-lg shadow-lg w-1/2">
+                                <p class="font-bold text-sm text-heading">Lakeside Café</p>
+                                <p class="text-xs text-body">Open until 6 PM</p>
+                                <p class="text-xs text-accent">★★★★☆</p>
+                           </div>
+                        </div>
+                    </div>`,
+                '3': `
+                    <div class="h-full flex flex-col bg-blue-100">
+                        <div class="bg-blue-400 text-white p-2 font-semibold text-center">Viitasaari Bot</div>
+                        <div class="flex-grow p-2 space-y-3 flex flex-col justify-end">
+                            <div class="p-2 rounded-lg bg-white self-start max-w-xs shadow-sm"><p class="text-sm text-gray-800">Welcome! How can I help you explore Viitasaari?</p></div>
+                            <div class="p-2 rounded-lg bg-blue-500 text-white self-end max-w-xs shadow-sm"><p class="text-sm">Any recommendations for a family-friendly activity?</p></div>
+                            <div class="p-2 rounded-lg bg-white self-start max-w-xs shadow-sm"><p class="text-sm text-gray-800">Certainly! The Central Park has a great playground and is a short walk from the town center.</p></div>
+                        </div>
+                         <div class="p-2 bg-white text-gray-400 text-sm">Type your message...</div>
+                    </div>`
+            };
+            
+            function updateMockup(tabId) {
+                mockupScreen.innerHTML = mockupContent[tabId];
+            }
+            
+            updateMockup('1');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.dataset.tab;
+
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    tabPanes.forEach(pane => {
+                        if (pane.dataset.tabPane === tabId) {
+                            pane.classList.remove('hidden');
+                        } else {
+                            pane.classList.add('hidden');
+                        }
+                    });
+                    
+                    updateMockup(tabId);
+                });
+            });
+
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Technical Development', 'Community Engagement & Content', 'Deployment & Materials'],
+                    datasets: [{
+                        label: 'Budget Allocation',
+                        data: [1200, 500, 300],
+                        backgroundColor: [
+                            '#81B29A',
+                            '#3D405B',
+                            '#E07A5F'
+                        ],
+                        borderColor: '#F8F7F4',
+                        borderWidth: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#3D405B',
+                                font: {
+                                    family: "'Inter', sans-serif"
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) {
+                                      return label.join(' ');
+                                    } else {
+                                      return label;
+                                    }
+                                },
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += new Intl.NumberFormat('fi-FI', { style: 'currency', currency: 'EUR' }).format(context.parsed);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+            
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
+
